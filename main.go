@@ -35,7 +35,10 @@ func cacheAccessToken(accessTokenCH chan string) {
         log.Println("saving access token")
         err = mc.Set(&memcache.Item{
             Key: accessTokenKey,
-            Value: []byte(accessTokenResp.AccessToken),
+            Object: map[string]interface{} {
+                "access_token": accessTokenResp.AccessToken,
+                "expires_in": accessTokenResp.ExpiresIn,
+            },
         })
         if err != nil {
             log.Println("save access token error")
@@ -72,7 +75,10 @@ func cacheJSSDKTicket(accessTokenCH chan string) {
         log.Println("saving jssdk ticket")
         err = mc.Set(&memcache.Item{
             Key: jssdkTicketKey,
-            Value: []byte(jssdkTicketResponse.Ticket),
+            Object: map[string]interface{} {
+                "ticket": jssdkTicketResponse.Ticket,
+                "expires_in": jssdkTicketResponse.ExpiresIn,
+            },
         })
         if err != nil {
             log.Println("save jssdk ticket error")
